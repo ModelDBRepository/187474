@@ -1,0 +1,38 @@
+begintemplate fourcompartment
+
+public soma, dend, apic
+public init
+
+create soma, dend, apic[2]
+
+proc init() {
+
+ connect dend(0), soma(0)
+ connect apic[0](0), soma(1)
+ connect apic[1](0), apic[0](1)
+
+ soma insert pas
+ dend insert pas
+ apic[0] insert pas
+ apic[1] insert pas
+
+ soma {nseg = 1 Ra = 100 diam = 13.47 L = 23.17 cm = 1 V = -80 e_pas = -90}
+ dend {nseg = 1 Ra = 100 diam = 10.28 L = 282.13 cm = 2 V = -80 e_pas = -90}
+ apic[0] {nseg = 1 Ra = 100 diam = 5.04 L = 700.0 cm = 2 V = -80 e_pas = -90}
+ apic[1] {nseg = 1 Ra = 100 diam = 5.04 L = 600.53 cm = 2 V = -80 e_pas = -90}
+
+ soma { 
+  g_pas = 0.0000338
+ }
+ dend {
+  g_pas = 0.0000467
+ }
+ apic[0] {
+  g_pas = 0.0000589
+ }
+ apic[1] {
+  g_pas = 0.0000589
+ }
+}
+
+endtemplate fourcompartment

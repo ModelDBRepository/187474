@@ -1,0 +1,169 @@
+load_file("stdlib.hoc")
+load_file("stdrun.hoc")
+objref cvode
+cvode = new CVode()
+cvode.active(1)
+cvode.atol(0.00005)
+load_file("models/fourcompartment.hoc")
+objref L5PC
+L5PC = new fourcompartment()
+access L5PC.soma
+distance()
+objref vsoma, vdend, casoma, cadend
+vsoma = new Vector()
+vdend = new Vector()
+casoma = new Vector()
+cadend = new Vector()
+objref st1, syn1, tvec, sl
+tvec = new Vector()
+L5PC.soma st1 = new IClamp(0.5)
+st1.amp = 0
+syn1 = new epsp(0.5)
+syn1.tau0 = 0.5
+syn1.tau1 = 5
+syn1.imax = 0
+
+v_init = -80
+cai0_ca_ion = 0.0001
+
+BACdt = 5.0
+
+L5PC.soma { nseg=5  L=24.5235  Ra=379.507
+        insert Ih { gIhbar_Ih=0.000279218 ehcn_Ih=-40.6682 offma_Ih=-154.9 sloma_Ih=11.9 tauma_Ih=155.521 offmb_Ih=0 slomb_Ih=33.1 taumb_Ih=5.18135}
+        insert CaDynamics_E2 { gamma_CaDynamics_E2=0.0005 decay_CaDynamics_E2=488.347 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+        insert NaTa_t { gNaTa_tbar_NaTa_t=2.41114 offm_NaTa_t=-38 offh_NaTa_t=-66 slom_NaTa_t=6 sloh_NaTa_t=6 tauma_NaTa_t=5.49451 taumb_NaTa_t=8.06452 tauha_NaTa_t=66.6667 tauhb_NaTa_t=66.6667}
+        insert Nap_Et2 { gNap_Et2bar_Nap_Et2=0.00206183 offm_Nap_Et2=-52.6 slom_Nap_Et2=4.6 offma_Nap_Et2=-38 offmb_Nap_Et2=-38 sloma_Nap_Et2=6 slomb_Nap_Et2=6 tauma_Nap_Et2=5.49451 taumb_Nap_Et2=8.06452 taummax_Nap_Et2=6 offh_Nap_Et2=-48.8 sloh_Nap_Et2=10 offha_Nap_Et2=-17 offhb_Nap_Et2=-64.4 sloha_Nap_Et2=4.63 slohb_Nap_Et2=2.63 tauha_Nap_Et2=347222 tauhb_Nap_Et2=144092 tauhmax_Nap_Et2=1}
+        insert na_ion { ena=50}
+        insert K_Pst { gK_Pstbar_K_Pst=0.000175889 offm_K_Pst=-11 slom_K_Pst=12 offmt_K_Pst=-10 slomt_K_Pst=38.4615 taummin_K_Pst=1.25 taumdiff1_K_Pst=175.03 taumdiff2_K_Pst=13 offh_K_Pst=-64 sloh_K_Pst=11 offht1_K_Pst=-65 offht2_K_Pst=-85 sloht_K_Pst=48 tauhmean_K_Pst=360 tauhdiff1_K_Pst=1010 tauhdiff2_K_Pst=24}
+        insert K_Tst { gK_Tstbar_K_Tst=0.0238758 offm_K_Tst=-10 slom_K_Tst=19 offh_K_Tst=-76 sloh_K_Tst=10 offmt_K_Tst=-81 slomt_K_Tst=59 taummin_K_Tst=0.34 taumdiff_K_Tst=0.92 offht_K_Tst=-83 sloht_K_Tst=23 tauhmin_K_Tst=8 tauhdiff_K_Tst=49}
+        insert SK_E2 { gSK_E2bar_SK_E2=0.0478551 zTau_SK_E2=1 offc_SK_E2=0.00043 sloc_SK_E2=4.8}
+        insert SKv3_1 { gSKv3_1bar_SKv3_1=0.700652 offma_SKv3_1=18.7 offmt_SKv3_1=-46.56 sloma_SKv3_1=9.7 slomt_SKv3_1=44.14 taummax_SKv3_1=4}
+        insert k_ion { ek=-85}
+        insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000838171 offma_Ca_HVA=-27 offmb_Ca_HVA=-75 offha_Ca_HVA=-13 offhb_Ca_HVA=-15 sloma_Ca_HVA=3.8 slomb_Ca_HVA=17 sloha_Ca_HVA=50 slohb_Ca_HVA=28 tauma_Ca_HVA=18.1818 taumb_Ca_HVA=1.06383 tauha_Ca_HVA=2188.18 tauhb_Ca_HVA=153.846}
+        insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.00311435 offma_Ca_LVAst=-40 offmt_Ca_LVAst=-35 offha_Ca_LVAst=-90 offht_Ca_LVAst=-50 sloma_Ca_LVAst=6 slomt_Ca_LVAst=5 sloha_Ca_LVAst=6.4 sloht_Ca_LVAst=7 taummin_Ca_LVAst=5 taumdiff_Ca_LVAst=20 tauhmin_Ca_LVAst=20 tauhdiff_Ca_LVAst=50}
+        insert ca_ion {}
+        insert pas { g_pas=4.37095e-05 e_pas=-90}
+        insert capacitance { cm=1.2154}
+        insert morphology { diam=14.6852}
+}
+
+L5PC.dend { nseg=5  L=425.88  Ra=197.234
+        insert Ih { gIhbar_Ih=0.0002935 ehcn_Ih=-40.6682 offma_Ih=-154.9 sloma_Ih=11.9 tauma_Ih=155.521 offmb_Ih=0 slomb_Ih=33.1 taumb_Ih=5.18135}
+        insert pas { g_pas=3.79351e-05 e_pas=-90}
+        insert capacitance { cm=1.93792}
+        insert morphology { diam=6.62433}
+}
+
+L5PC.apic[0] { nseg=5  L=399.775  Ra=957.826
+        insert Ih { gIhbar_Ih=0 ehcn_Ih=-40.6682 offma_Ih=-154.9 sloma_Ih=11.9 tauma_Ih=155.521 offmb_Ih=0 slomb_Ih=33.1 taumb_Ih=5.18135}
+        insert CaDynamics_E2 { gamma_CaDynamics_E2=0.0347197 decay_CaDynamics_E2=142.068 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+        insert Im { gImbar_Im=0.000143416 offma_Im=-35 sloma_Im=10 tauma_Im=303.03 offmb_Im=-35 slomb_Im=10 taumb_Im=303.03}
+        insert NaTa_t { gNaTa_tbar_NaTa_t=0.0134547 offm_NaTa_t=-38 offh_NaTa_t=-66 slom_NaTa_t=6 sloh_NaTa_t=6 tauma_NaTa_t=5.49451 taumb_NaTa_t=8.06452 tauha_NaTa_t=66.6667 tauhb_NaTa_t=66.6667}
+        insert na_ion { ena=50}
+        insert SK_E2 { gSK_E2bar_SK_E2=0.000230911 zTau_SK_E2=1 offc_SK_E2=0.00043 sloc_SK_E2=4.8}
+        insert SKv3_1 { gSKv3_1bar_SKv3_1=0.00121434 offma_SKv3_1=18.7 offmt_SKv3_1=-46.56 sloma_SKv3_1=9.7 slomt_SKv3_1=44.14 taummax_SKv3_1=4}
+        insert k_ion { ek=-85}
+        insert Ca_HVA { gCa_HVAbar_Ca_HVA=0 offma_Ca_HVA=-27 offmb_Ca_HVA=-75 offha_Ca_HVA=-13 offhb_Ca_HVA=-15 sloma_Ca_HVA=3.8 slomb_Ca_HVA=17 sloha_Ca_HVA=50 slohb_Ca_HVA=28 tauma_Ca_HVA=18.1818 taumb_Ca_HVA=1.06383 tauha_Ca_HVA=2188.18 tauhb_Ca_HVA=153.846}
+        insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0 offma_Ca_LVAst=-40 offmt_Ca_LVAst=-35 offha_Ca_LVAst=-90 offht_Ca_LVAst=-50 sloma_Ca_LVAst=6 slomt_Ca_LVAst=5 sloha_Ca_LVAst=6.4 sloht_Ca_LVAst=7 taummin_Ca_LVAst=5 taumdiff_Ca_LVAst=20 tauhmin_Ca_LVAst=20 tauhdiff_Ca_LVAst=50}
+        insert ca_ion {}
+        insert pas { g_pas=5.29409e-05 e_pas=-90}
+        insert capacitance { cm=1.44542}
+        insert morphology { diam=10.6175}
+}
+
+L5PC.apic[1] { nseg=5  L=702.194  Ra=224.271
+        insert Ih { gIhbar_Ih=0.00492557 ehcn_Ih=-40.6682 offma_Ih=-154.9 sloma_Ih=11.9 tauma_Ih=155.521 offmb_Ih=0 slomb_Ih=33.1 taumb_Ih=5.18135}
+        insert CaDynamics_E2 { gamma_CaDynamics_E2=0.0005 decay_CaDynamics_E2=95.406 depth_CaDynamics_E2=0.1 minCai_CaDynamics_E2=0.0001}
+        insert Im { gImbar_Im=0.000112799 offma_Im=-35 sloma_Im=10 tauma_Im=303.03 offmb_Im=-35 slomb_Im=10 taumb_Im=303.03}
+        insert NaTa_t { gNaTa_tbar_NaTa_t=0.0131333 offm_NaTa_t=-38 offh_NaTa_t=-66 slom_NaTa_t=6 sloh_NaTa_t=6 tauma_NaTa_t=5.49451 taumb_NaTa_t=8.06452 tauha_NaTa_t=66.6667 tauhb_NaTa_t=66.6667}
+        insert na_ion { ena=50}
+        insert SK_E2 { gSK_E2bar_SK_E2=0.00364934 zTau_SK_E2=1 offc_SK_E2=0.00043 sloc_SK_E2=4.8}
+        insert SKv3_1 { gSKv3_1bar_SKv3_1=0 offma_SKv3_1=18.7 offmt_SKv3_1=-46.56 sloma_SKv3_1=9.7 slomt_SKv3_1=44.14 taummax_SKv3_1=4}
+        insert k_ion { ek=-85}
+        insert Ca_HVA { gCa_HVAbar_Ca_HVA=0.000977359 offma_Ca_HVA=-27 offmb_Ca_HVA=-75 offha_Ca_HVA=-13 offhb_Ca_HVA=-15 sloma_Ca_HVA=3.8 slomb_Ca_HVA=17 sloha_Ca_HVA=50 slohb_Ca_HVA=28 tauma_Ca_HVA=18.1818 taumb_Ca_HVA=1.06383 tauha_Ca_HVA=2188.18 tauhb_Ca_HVA=153.846}
+        insert Ca_LVAst { gCa_LVAstbar_Ca_LVAst=0.000486888 offma_Ca_LVAst=-40 offmt_Ca_LVAst=-35 offha_Ca_LVAst=-90 offht_Ca_LVAst=-50 sloma_Ca_LVAst=6 slomt_Ca_LVAst=5 sloha_Ca_LVAst=6.4 sloht_Ca_LVAst=7 taummin_Ca_LVAst=5 taumdiff_Ca_LVAst=20 tauhmin_Ca_LVAst=20 tauhdiff_Ca_LVAst=50}
+        insert ca_ion {}
+        insert pas { g_pas=6.83036e-05 e_pas=-90}
+        insert capacitance { cm=2.6039}
+        insert morphology { diam=3.47888}
+}
+
+
+L5PC.soma cvode.record(&v(0.5),vsoma,tvec)
+L5PC.soma cvode.record(&cai(0.5),casoma,tvec)
+L5PC.apic[1] syn1.loc(0.313624422238)
+L5PC.apic[1] cvode.record(&v(0.313624422238),vdend,tvec)
+L5PC.apic[1] cvode.record(&cai(0.313624422238),cadend,tvec)
+
+
+/*############################################# Condition 1: Short burst, 3 spikes #############################################*/
+tstop = 10500.0
+st1.amp = 0.5
+st1.del = 10200
+st1.dur = 150.0
+syn1.imax = 0.0
+syn1.onset = 10200 + BACdt
+
+init()
+run()
+
+objref myFile
+myFile = new File()
+myFile.wopen("run_1.dat")
+for i=0,tvec.size()-1 {
+  myFile.printf("%g %g %g\n", tvec.x(i), vsoma.x(i), vdend.x(i))
+}
+myFile.close()
+
+/*############################################# Condition 2: Distal EPSC, 1 spike #############################################*/
+
+st1.amp = 0.0
+syn1.imax = 1.0
+syn1.onset = 10200 + BACdt
+
+init()
+run()
+
+myFile.wopen("run_2.dat")
+for i=0,tvec.size()-1 {
+  myFile.printf("%g %g %g\n", tvec.x(i), vsoma.x(i), vdend.x(i))
+}
+myFile.close()
+
+/*############################################# Condition 3: Somatic stim + EPSC, 2 spikes #############################################*/
+
+st1.amp = 1.9
+st1.dur = 5
+syn1.imax = 0.5
+syn1.onset = 10200 + BACdt
+
+init()
+run()
+
+myFile.wopen("run_3.dat")
+for i=0,tvec.size()-1 {
+  myFile.printf("%g %g %g\n", tvec.x(i), vsoma.x(i), vdend.x(i))
+}
+myFile.close()
+
+/*############################################# Condition 3a: Removed the EPSP, only 1 spike #############################################*/
+
+st1.amp = 1.9
+st1.dur = 5
+syn1.imax = 0.0
+syn1.onset = 10200 + BACdt
+
+init()
+run()
+
+myFile.wopen("run_3a.dat")
+for i=0,tvec.size()-1 {
+  myFile.printf("%g %g %g\n", tvec.x(i), vsoma.x(i), vdend.x(i))
+}
+myFile.close()
+
+L5PC.soma psection()
+L5PC.dend psection()
+L5PC.apic[0] psection()
+L5PC.apic[1] psection()
+

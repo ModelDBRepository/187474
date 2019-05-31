@@ -1,0 +1,114 @@
+begintemplate fourcompartment
+
+public soma, dend, apic
+public init
+
+create soma, dend, apic[2]
+
+public somatic, basal, apical
+objref somatic, basal, apical
+
+proc init() {
+
+ connect dend(0), soma(0)
+ connect apic[0](0), soma(1)
+ connect apic[1](0), apic[0](1)
+
+ soma insert pas
+ dend insert pas
+ apic[0] insert pas
+ apic[1] insert pas
+
+ soma {nseg = 1 Ra = 100 diam = 13.47 L = 23.17 cm = 1 V = -80 e_pas = -90}
+ dend {nseg = 1 Ra = 100 diam = 10.28 L = 282.13 cm = 2 V = -80 e_pas = -90}
+ apic[0] {nseg = 1 Ra = 100 diam = 5.04 L = 700.0 cm = 2 V = -80 e_pas = -90}
+ apic[1] {nseg = 1 Ra = 100 diam = 5.04 L = 600.53 cm = 2 V = -80 e_pas = -90}
+
+ soma { 
+  insert Ca_LVAst
+  insert Ca_HVA
+  insert SKv3_1
+  insert SK_E2
+  insert K_Tst
+  insert K_Pst
+  insert Nap_Et2
+  insert NaTa_t
+  insert CaDynamics_E2
+  insert Ih
+  ek = -85
+  ena = 50
+  gIhbar_Ih = 0.0002
+  g_pas = 0.0000338
+  decay_CaDynamics_E2 = 460.0
+  gamma_CaDynamics_E2 = 0.000501
+  gCa_LVAstbar_Ca_LVAst = 0.00343
+  gCa_HVAbar_Ca_HVA = 0.000992
+  gSKv3_1bar_SKv3_1 = 0.693
+  gSK_E2bar_SK_E2 = 0.0441
+  gK_Tstbar_K_Tst = 0.0812
+  gK_Pstbar_K_Pst = 0.00223
+  gNap_Et2bar_Nap_Et2 = 0.00172
+  gNaTa_tbar_NaTa_t = 2.04
+ }
+ dend {
+  insert Ih
+  gIhbar_Ih = 0.0002
+  g_pas = 0.0000467
+ }
+ apic[0] {
+  insert Ca_LVAst
+  insert Ca_HVA
+  insert SKv3_1
+  insert SK_E2
+  insert NaTa_t
+  insert Im
+  insert CaDynamics_E2
+  insert Ih
+  ek = -85
+  ena = 50
+  decay_CaDynamics_E2 = 122
+  gamma_CaDynamics_E2 = 0.000509
+  gSK_E2bar_SK_E2 = 0.0012
+  gSKv3_1bar_SKv3_1 = 0.000261
+  gNaTa_tbar_NaTa_t = 0.0213
+  gImbar_Im = 0.0000675
+  g_pas = 0.0000589
+  gIhbar_Ih = 0.0004
+  gCa_LVAstbar_Ca_LVAst = 0.0187
+  gCa_HVAbar_Ca_HVA = 0.000555
+ }
+ apic[1] {
+  insert Ca_LVAst
+  insert Ca_HVA
+  insert SKv3_1
+  insert SK_E2
+  insert NaTa_t
+  insert Im
+  insert CaDynamics_E2
+  insert Ih
+  ek = -85
+  ena = 50
+  decay_CaDynamics_E2 = 122
+  gamma_CaDynamics_E2 = 0.000509
+  gSK_E2bar_SK_E2 = 0.0012
+  gSKv3_1bar_SKv3_1 = 0.000261
+  gNaTa_tbar_NaTa_t = 0.0213
+  gImbar_Im = 0.0000675
+  g_pas = 0.0000589
+  gIhbar_Ih = 0.0004
+  gCa_LVAstbar_Ca_LVAst = 0.0187
+  gCa_HVAbar_Ca_HVA = 0.000555
+ }
+
+ somatic = new SectionList()  
+ basal = new SectionList()    
+ apical = new SectionList()   
+
+ apic[0] apical.append() 
+ apic[1] apical.append() 
+ dend basal.append()     
+ soma somatic.append() 
+
+}
+
+endtemplate fourcompartment

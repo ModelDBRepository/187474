@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<neuroml xmlns="http://www.neuroml.org/schema/neuroml2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2  https://raw.githubusercontent.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta4.xsd" id="Soma_AllCML">
+
+    <include href="Ca_HVA.channel.nml"/>
+
+    <include href="Ca_LVAst.channel.nml"/>
+
+    <include href="CaDynamics_E2_NML2_soma.nml"/>
+    <include href="CaDynamics_E2_NML2_apicTrunk.nml"/>
+    <include href="CaDynamics_E2_NML2.apicTuft.nml"/>
+
+    <include href="Ih.channel.nml"/>
+
+    <include href="Im.channel.nml"/>
+
+    <include href="K_Pst.channel.nml"/>
+
+    <include href="K_Tst.channel.nml"/>
+
+    <include href="Nap_Et2.channel.nml"/>
+
+    <include href="NaTa_t.channel.nml"/>
+
+    <include href="pas.channel.nml"/>
+
+    <include href="SK_E2.channel.nml"/>
+
+    <include href="SKv3_1.channel.nml"/>
+
+    <cell id="Soma_AllCML">
+
+        <notes>A single segment/compartment cell</notes>
+
+        <morphology id="morphology_Soma_AllCML">
+
+            <segment id="0" name="Soma">
+                <proximal x="0.0" y="0.0" z="0.0" diameter="14.6852"/>
+                <distal x="0.0" y="24.5235" z="0.0" diameter="14.6852"/>
+            </segment>
+
+            <segment id="1" name="Trunk">
+                <parent segment="0"/>
+                <proximal x="0.0" y="24.5235" z="0.0" diameter="10.6175"/>
+                <distal x="0.0" y="424.2985" z="0.0" diameter="10.6175"/>
+            </segment>
+
+            <segment id="2" name="Tuft">
+                <parent segment="1"/>
+                <proximal x="0.0" y="424.5235" z="0.0" diameter="3.47888"/>
+                <distal x="0.0" y="1126.4925" z="0.0" diameter="3.47888"/>
+            </segment>
+
+            <segment id="3" name="Dend">
+                <parent segment="0" fractionAlong="0.0"/>
+                <proximal x="0.0" y="0.0" z="0.0" diameter="6.62433"/>
+                <distal x="0.0" y="-425.88" z="0.0" diameter="6.62433"/>
+            </segment>
+
+            <segmentGroup id="Soma" neuroLexId="sao864921383">    <!--
+                This group contains an unbranched set of segments, and all of the segmentGroups marked with
+                neuroLexId = sao864921383 form a non-overlapping set of all of the segments. 
+                These segmentGroups correspond to the 'cables' of NeuroML v1.8.1. -->
+
+                <annotation>
+                    <property tag="numberInternalDivisions" value="5"/>
+                </annotation>
+                <member segment="0"/>
+            </segmentGroup>
+
+            <segmentGroup id="Trunk" neuroLexId="sao864921383">    <!--
+                This group contains an unbranched set of segments, and all of the segmentGroups marked with
+                neuroLexId = sao864921383 form a non-overlapping set of all of the segments. 
+                These segmentGroups correspond to the 'cables' of NeuroML v1.8.1. -->
+
+                <annotation>
+                    <property tag="numberInternalDivisions" value="5"/>
+                </annotation>
+                <member segment="1"/>
+            </segmentGroup>
+            <segmentGroup id="Tuft" neuroLexId="sao864921383">    <!--
+                This group contains an unbranched set of segments, and all of the segmentGroups marked with
+                neuroLexId = sao864921383 form a non-overlapping set of all of the segments. 
+                These segmentGroups correspond to the 'cables' of NeuroML v1.8.1. -->
+
+                <annotation>
+                    <property tag="numberInternalDivisions" value="5"/>
+                </annotation>
+                <member segment="2"/>
+            </segmentGroup>
+
+            <segmentGroup id="Dend" neuroLexId="sao864921383">    <!--
+                This group contains an unbranched set of segments, and all of the segmentGroups marked with
+                neuroLexId = sao864921383 form a non-overlapping set of all of the segments. 
+                These segmentGroups correspond to the 'cables' of NeuroML v1.8.1. -->
+
+                <!--This 'Section' has number of internal divisions (nseg) = 2-->
+
+                <annotation>
+                    <property tag="numberInternalDivisions" value="5"/>
+                </annotation>
+            
+                <member segment="3"/>
+            </segmentGroup>
+
+            <segmentGroup id="ApicalTrunk">
+                <include segmentGroup="Trunk"/>
+            </segmentGroup>
+            <segmentGroup id="ApicalTuft">
+                <include segmentGroup="Tuft"/>
+            </segmentGroup>
+
+            <segmentGroup id="all">
+                <include segmentGroup="Soma"/>
+                <include segmentGroup="ApicalTrunk"/>
+                <include segmentGroup="ApicalTuft"/>
+                <include segmentGroup="Dend"/>
+            </segmentGroup>
+
+            <segmentGroup id="soma_group" neuroLexId="GO:0043025">    <!--Soma group-->
+                <include segmentGroup="Soma"/>
+            </segmentGroup>
+
+            <segmentGroup id="dendrite_group" neuroLexId="GO:0030425">    <!--Dendrite group-->
+                <include segmentGroup="ApicalTrunk"/>
+                <include segmentGroup="ApicalTuft"/>
+                <include segmentGroup="Dend"/>
+            </segmentGroup>
+
+            <segmentGroup id="ApicalDend">
+                <include segmentGroup="ApicalTrunk"/>
+                <include segmentGroup="ApicalTuft"/>
+            </segmentGroup>
+
+            <segmentGroup id="Basal">
+                <include segmentGroup="Dend"/>
+            </segmentGroup>
+            
+        </morphology>
+
+
+        <biophysicalProperties id="biophys">
+
+            <membraneProperties>
+                
+                <channelDensity condDensity="0.279218 mS_per_cm2" id="Ih_soma_group" ionChannel="Ih" segmentGroup="soma_group" ion="hcn" erev="-40.6682 mV"/>
+                <channelDensity condDensity="0.2935 mS_per_cm2" id="Ih_Basal" ionChannel="Ih" segmentGroup="Basal" ion="hcn" erev="-40.6682 mV"/>
+                <channelDensity condDensity="0.0 mS_per_cm2" id="Ih_ApicalTrunk" ionChannel="Ih" segmentGroup="ApicalTrunk" ion="hcn" erev="-40.6682 mV"/>
+                <channelDensity condDensity="4.92557 mS_per_cm2" id="Ih_ApicalTuft" ionChannel="Ih" segmentGroup="ApicalTuft" ion="hcn" erev="-40.6682 mV"/>
+
+                <channelDensity condDensity="0.143416 mS_per_cm2" id="Im_ApicalTrunk" ionChannel="Im" segmentGroup="ApicalTrunk" ion="k" erev="-85.0 mV"/>
+                <channelDensity condDensity="0.112799 mS_per_cm2" id="Im_ApicalTuft" ionChannel="Im" segmentGroup="ApicalTuft" ion="k" erev="-85.0 mV"/>
+                
+                <channelDensity condDensity="0.175889 mS_per_cm2" id="K_Pst_soma_group" ionChannel="K_Pst" segmentGroup="soma_group" ion="k" erev="-85.0 mV"/>
+                
+                <channelDensity condDensity="23.8758 mS_per_cm2" id="K_Tst_soma_group" ionChannel="K_Tst" segmentGroup="soma_group" ion="k" erev="-85.0 mV"/>
+                
+                <channelDensity condDensity="2.06183 mS_per_cm2" id="Nap_Et2_soma_group" ionChannel="Nap_Et2" segmentGroup="soma_group" ion="na" erev="50.0 mV"/>
+                
+                <channelDensity condDensity="2411.14 mS_per_cm2" id="NaTa_t_soma_group" ionChannel="NaTa_t" segmentGroup="soma_group" ion="na" erev="50.0 mV"/>
+                <channelDensity condDensity="13.4547 mS_per_cm2" id="NaTa_t_ApicalTrunk" ionChannel="NaTa_t" segmentGroup="ApicalTrunk" ion="na" erev="50.0 mV"/>
+                <channelDensity condDensity="13.1333 mS_per_cm2" id="NaTa_t_ApicalTuft" ionChannel="NaTa_t" segmentGroup="ApicalTuft" ion="na" erev="50.0 mV"/>
+                
+                <channelDensity condDensity="0.0437095 mS_per_cm2" id="pas_soma_group" ionChannel="pas" segmentGroup="soma_group" ion="non_specific" erev="-90.0 mV"/>
+                <channelDensity condDensity="0.0379351 mS_per_cm2" id="pas_Basal" ionChannel="pas" segmentGroup="Basal" ion="non_specific" erev="-90.0 mV"/>
+                <channelDensity condDensity="0.0529409 mS_per_cm2" id="pas_ApicalTrunk" ionChannel="pas" segmentGroup="ApicalTrunk" ion="non_specific" erev="-90.0 mV"/>
+                <channelDensity condDensity="0.0683036 mS_per_cm2" id="pas_ApicalTuft" ionChannel="pas" segmentGroup="ApicalTuft" ion="non_specific" erev="-90.0 mV"/>
+                
+                <channelDensity condDensity="0.230911 mS_per_cm2" id="SK_E2_ApicalTrunk" ionChannel="SK_E2" segmentGroup="ApicalTrunk" ion="k" erev="-85.0 mV"/>
+                <channelDensity condDensity="3.64934 mS_per_cm2" id="SK_E2_ApicalTuft" ionChannel="SK_E2" segmentGroup="ApicalTuft" ion="k" erev="-85.0 mV"/>
+                <channelDensity condDensity="47.8551 mS_per_cm2" id="SK_E2_soma_group" ionChannel="SK_E2" segmentGroup="soma_group" ion="k" erev="-85.0 mV"/>
+                
+                <channelDensity condDensity="1.21434 mS_per_cm2" id="SKv3_1_ApicalTrunk" ionChannel="SKv3_1" segmentGroup="ApicalTrunk" ion="k" erev="-85.0 mV"/>
+                <channelDensity condDensity="0.0 mS_per_cm2" id="SKv3_1_ApicalTuft" ionChannel="SKv3_1" segmentGroup="ApicalTuft" ion="k" erev="-85.0 mV"/>
+                <channelDensity condDensity="700.652 mS_per_cm2" id="SKv3_1_soma_group" ionChannel="SKv3_1" segmentGroup="soma_group" ion="k" erev="-85.0 mV"/>
+                
+
+                <!--Reversal potential for ca in Ca_HVA will be calculated by Nernst equation from internal & external calcium-->
+
+                <channelDensityNernst condDensity="0.0 mS_per_cm2" id="Ca_HVA_ApicalTrunk" ionChannel="Ca_HVA" segmentGroup="ApicalTrunk" ion="ca"/>
+                <channelDensityNernst condDensity="0.977359 mS_per_cm2" id="Ca_HVA_ApicalTuft" ionChannel="Ca_HVA" segmentGroup="ApicalTuft" ion="ca"/>
+                <channelDensityNernst condDensity="0.838171 mS_per_cm2" id="Ca_HVA_soma_group" ionChannel="Ca_HVA" segmentGroup="soma_group" ion="ca"/>
+                
+                <!--Reversal potential for ca in Ca_LVAst will be calculated by Nernst equation from internal & external calcium-->
+
+                <channelDensityNernst condDensity="0.0 mS_per_cm2" id="Ca_LVAst_ApicalTrunk" ionChannel="Ca_LVAst" segmentGroup="ApicalTrunk" ion="ca"/>
+                <channelDensityNernst condDensity="0.486888 mS_per_cm2" id="Ca_LVAst_ApicalTuft" ionChannel="Ca_LVAst" segmentGroup="ApicalTuft" ion="ca"/>
+                <channelDensityNernst condDensity="3.11435 mS_per_cm2" id="Ca_LVAst_soma_group" ionChannel="Ca_LVAst" segmentGroup="soma_group" ion="ca"/>
+
+                <spikeThresh value="0 mV"/>
+
+
+                <specificCapacitance segmentGroup="soma_group" value="1.2154 uF_per_cm2"/>
+
+                <specificCapacitance segmentGroup="ApicalTrunk" value="1.44542 uF_per_cm2"/>
+
+                <specificCapacitance segmentGroup="ApicalTuft" value="2.6039 uF_per_cm2"/>
+
+                <specificCapacitance segmentGroup="Basal" value="1.93792 uF_per_cm2"/>
+
+                <initMembPotential value="-80.0 mV"/>
+
+            </membraneProperties>
+
+            <intracellularProperties>
+
+                <species segmentGroup="ApicalTrunk" id="ca" ion="ca" concentrationModel="CaDynamics_E2_NML2_apicTrunk"  initialConcentration="1.0E-10 mol_per_cm3" initialExtConcentration="2.0E-6 mol_per_cm3"/>
+
+                <species segmentGroup="ApicalTuft" id="ca" ion="ca" concentrationModel="CaDynamics_E2_NML2_apicTuft"  initialConcentration="1.0E-10 mol_per_cm3" initialExtConcentration="2.0E-6 mol_per_cm3"/>
+
+                <species segmentGroup="soma_group" id="ca" ion="ca" concentrationModel="CaDynamics_E2_NML2_soma"  initialConcentration="1.0E-10 mol_per_cm3" initialExtConcentration="2.0E-6 mol_per_cm3"/>
+
+                <resistivity segmentGroup="soma_group" value="0.379507 kohm_cm"/>
+
+                <resistivity segmentGroup="ApicalTrunk" value="0.957826 kohm_cm"/>
+
+                <resistivity segmentGroup="ApicalTuft" value="0.224271 kohm_cm"/>
+
+                <resistivity segmentGroup="Basal" value="0.197234 kohm_cm"/>
+
+            </intracellularProperties>
+
+        </biophysicalProperties>
+
+    </cell>
+    
+</neuroml>

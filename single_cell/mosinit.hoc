@@ -1,0 +1,6 @@
+load_file("nrngui.hoc")
+load_file("runmodel.hoc")
+load_file("run_ctrl_vgraph.ses")
+init()
+run()
+print "see README and data files run_1.dat  run_2.dat  run_3a.dat  run_3.dat"

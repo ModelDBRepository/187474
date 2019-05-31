@@ -1,0 +1,44 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.7.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/lems/0.7.2  https://raw.github.com/LEMS/LEMS/development/Schemas/LEMS/LEMS_v0.7.2.xsd">
+
+    <Target component="sim1" reportFile="simulator.props" timesFile="time.dat"/>
+
+        <!--Include standard NeuroML 2 ComponentType definitions-->
+
+    <Include file="Cells.xml"/>
+    <Include file="Networks.xml"/>
+    <Include file="Simulation.xml"/>
+
+    
+        <!--Include the generated NeuroML 2 files-->
+        <!--   Channel/synapse files-->
+    <Include file="Ca_HVA.channel.nml"/>
+    <Include file="Ca_LVAst.channel.nml"/>
+    <Include file="CaDynamics_E2_NML2_soma.nml"/>
+    <Include file="CaDynamics_E2_NML2_apicTrunk.nml"/>
+    <Include file="CaDynamics_E2_NML2_apicTuft.nml"/>
+    <Include file="Ih.channel.nml"/>
+    <Include file="Im.channel.nml"/>
+    <Include file="K_Pst.channel.nml"/>
+    <Include file="K_Tst.channel.nml"/>
+    <Include file="Nap_Et2.channel.nml"/>
+    <Include file="NaTa_t.channel.nml"/>
+    <Include file="pas.channel.nml"/>
+    <Include file="SK_E2.channel.nml"/>
+    <Include file="SKv3_1.channel.nml"/>
+        <!--   Cell files-->
+    <Include file="Soma_AllCML.cell.nml"/>
+       <!--   Network file-->
+    <Include file="Hay_Cell_Condition1.net.nml"/>
+
+
+        <!--Note: this could be: Simulation id="sim1" ... , but Component type="Simulation" ... 
+        is used to allow validation of this file according to the LEMS schema specified above...-->
+    <Component type="Simulation" id="sim1" length="10500.0ms" step="0.005ms" target="Hay_Cell_Condition1">
+          
+        <OutputFile id="Soma_MemPot" fileName="output.dat">
+            <OutputColumn id="v" quantity="cell/0/cell/v"/>
+        </OutputFile>
+        </Component>
+
+
+</Lems>
